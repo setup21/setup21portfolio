@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import dns from 'node:dns';
 import mongoose from 'mongoose';
 import { requiredEnv } from './config';
 import setupSwagger from './swagger';
@@ -24,6 +25,15 @@ setupSwagger(app);
 
 const start = async (): Promise<void> => {
   const port = Number(process.env.PORT || 3000);
+  const mongoDnsServers = process.env.MONGO_DNS_SERVERS
+    ?.split(',')
+    .map((server) => server.trim())
+    .filter(Boolean);
+
+  if (mongoDnsServers?.length) {
+    dns.setServers(mongoDnsServers);
+  }
+
   await mongoose.connect(requiredEnv('MONGO_URI'), {
     dbName: process.env.MONGO_DB_NAME || 'setup21portfolio'
   });
