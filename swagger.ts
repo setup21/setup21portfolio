@@ -7,7 +7,7 @@ const spec = swaggerJSDoc({
   definition: {
     openapi: '3.0.0',
     info: { title: 'setup21portfolio API', version: '1.0.0' },
-    servers: [{ url: process.env.PUBLIC_BASE_URL || 'http://localhost:3000' }],
+    servers: [{ url: process.env.PUBLIC_BASE_URL || '/' }],
     components: { securitySchemes: { bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' } } }
   },
   apis: ['./main.ts', './src/**/*.ts']
@@ -22,3 +22,4 @@ export default (app: Express): void => {
     app.use('/docs', swaggerUi.serve, swaggerUi.setup(spec));
   }
 };
+

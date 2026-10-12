@@ -21,3 +21,11 @@ Azure App Service의 GitHub Actions 연결과 실제 배포 workflow는 새 GitH
 - 로컬에서 Node의 SRV DNS 조회가 실패하는 네트워크라면 `.env`에 `MONGO_DNS_SERVERS=8.8.8.8`을 추가하면 `npm start`가 해당 DNS를 사용합니다. Azure App Service에는 이 설정을 추가하지 않아 Azure 기본 DNS를 사용하게 하세요.
 
 로그인은 이 프로젝트의 `users` 컬렉션만 사용합니다. 기존 게임의 프로필·아이템 데이터 모델은 가져오지 않았습니다.
+
+## 웹앱 상태 API
+
+- GET /webapp/health: 서버가 요청을 처리할 수 있으면 { "result": true, "data": { "status": "ok" } }를 반환합니다.
+- GET /webapp/maintance: 점검 중 여부를 boolean으로 반환합니다. MAINTENANCE=true일 때 점검 중이며, 기존 프로젝트의 설정 이름 maintance도 호환됩니다.
+- GET /webapp/version: SERVER_VERSION 값을 반환합니다. 값이 없으면 기존 설정 이름 version, 그 다음 package.json 버전을 사용합니다.
+- Azure App Service의 환경 변수 > 앱 설정에 MAINTENANCE, SERVER_VERSION을 등록하면 됩니다. MAINTENANCE는 true 또는 false, SERVER_VERSION은 배포 버전 문자열로 설정하세요.
+- 두 API는 /docs Swagger 문서의 Webapp 태그에 표시됩니다.
